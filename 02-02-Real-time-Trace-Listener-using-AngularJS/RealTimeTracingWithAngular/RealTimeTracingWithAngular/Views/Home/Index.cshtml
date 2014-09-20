@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div ng-controller="defaultPageCtrl">
+    <div>{{model.label}}</div>
+</div>
+
+<ul id="traceMessages"></ul>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.signalR-2.0.2.js"></script>
+
+    <script type="text/javascript">
+
+        var app = angular.module('myApp', []);
+        app.value('$', $);
+
+        app.factory('signalRService', function ($, $rootScope) {
+
+            var hub = null;
+
+            return {
+                initialize: function () {
+                    connection = $.hubConnection();
+
+                    this.hub = connection.createHubProxy('traceHub');
+
+                    this.hub.on('traceReceived', function (trace) {
+                        $rootScope.$emit('onTraceReceived', trace);
+                    });
+
+                    connection.start(function () {
+
+                    });
+                }
+            };
+        });
+
+        app.controller('defaultPageCtrl', function ($scope, signalRService, $rootScope) {
+
+            $scope.model = {
+                label: 'Trace Messages'
+            };
+
+            $scope.$parent.$on('onTraceReceived', function (e, traceMsg) {
+                f = e;
+                $('#traceMessages').prepend('<li>' + traceMsg + '</li>');
+            });
+
+            signalRService.initialize();
+        });
+
+    </script>
+}

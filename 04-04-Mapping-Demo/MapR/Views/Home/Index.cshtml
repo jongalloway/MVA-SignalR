@@ -1,0 +1,122 @@
+﻿@{
+    ViewBag.Title = "Real-time Location Tracking";
+}
+<style type="text/css">
+    .map {
+        border: #555555 2px solid;
+        position: relative;
+        height: 490px;
+    }
+</style>
+
+<h2>@ViewBag.Title</h2>
+
+<div class="row">
+    <div class="col-md-1">Latitude</div>
+    <div class="col-md-1" id="lat"></div>
+</div>
+
+<div class="row">
+    <div class="col-md-1">Longitude</div>
+    <div class="col-md-1" id="lng"></div>
+</div>
+
+<div class="row" style="margin-top: 20px;">
+    <div class="map" id="mapDiv"></div>
+</div>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.signalR-2.0.2.js"></script>
+    <script charset="UTF-8" type="text/javascript" src="http://ecn.dev.virtualearth.net/mapcontrol/mapcontrol.ashx?v=7.0"></script>
+    <script type="text/javascript">
+        PageController = function () {
+            var hub = null;
+            self = this;
+            self.bingMapsApiKey = 'AuIhkxnwNXXs6jmfFvRJ-3aXaauI0BAsoTOun9RxqtRE7rg3aPwSIAYcIjWOh20P';
+            self.map = null;
+            self.loadMap = function () {
+                self.map = new Microsoft.Maps.Map(document.getElementById("mapDiv"),
+                {
+                    credentials: self.bingMapsApiKey,
+                    center: new Microsoft.Maps.Location(40.756537, -73.989684),
+                    mapTypeId: Microsoft.Maps.MapTypeId.road,
+                    zoom: 9
+                });
+            };
+            self.getPosition = function () {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(this.showPosition);
+                }
+            };
+            self.showPosition = function (position) {
+                self.map.setView(
+                    {
+                        center: new Microsoft.Maps.Location(position.coords.latitude, position.coords.longitude),
+                        zoom: 12
+                    });
+
+                $('#lat').text(position.coords.latitude);
+                $('#lng').text(position.coords.longitude);
+
+                // call the Web API controller to pass this browser's coordinates
+                $.post('/api/location', {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude
+                });
+            };
+            self.setDetails = function (e) {
+                var dt = new Date(e.target.timeStamp + ' UTC');
+                $('#checkInTime').text(dt.toString());
+                $('#detailsTitle').text('Check-in Details');
+                $('#reason').text(e.target.reason);
+                $('#latitude').text(e.target.getLocation().latitude);
+                $('#longitude').text(e.target.getLocation().longitude);
+            };
+            self.drawPointOnMap = function (lt,lg) {
+                var loc = new Microsoft.Maps.Location(lt, lg);
+                var pin = new Microsoft.Maps.Pushpin(loc);
+
+                self.map.entities.push(pin);
+
+                Microsoft.Maps.Events.addHandler(pin, 'click', function (e) {
+                    if (e.targetType == 'pushpin') {
+                        if ($('#detailsIntro').is(':visible') == true) {
+                            $('#detailsIntro').fadeOut('fast', function () {
+                                $('#detailsOfSelected').fadeIn('fast');
+                                self.setDetails(e);
+                            });
+                        }
+                        else {
+                            $('#detailsOfSelected').fadeOut('fast', function () {
+                                self.setDetails(e);
+                                $('#detailsOfSelected').fadeIn('fast');
+                            });
+                        }
+                    }
+                });
+            };
+            self.setupSignalR = function () {
+                console.log('creating connection');
+                connection = $.hubConnection();
+
+                hub = connection.createHubProxy('mappingHub');
+
+                hub.on('locationReceived', function (l) {
+                    self.drawPointOnMap(l.Latitude,l.Longitude);
+                });
+
+                connection.start(function () {
+                    console.log('connection started');
+                });
+            };
+        };
+
+        $(function () {
+            var controller = new PageController();
+            controller.loadMap();
+            controller.setupSignalR();
+            controller.getPosition();
+        });
+    </script>
+}

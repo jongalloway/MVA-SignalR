@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <div id="clock"></div>
+
+    <script src="Scripts/jquery-1.6.4.js"></script>
+    <script src="Scripts/jquery.signalR-2.0.3.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var con = $.hubConnection('http://localhost:8080');
+            var hub = con.createHubProxy('clockHub');
+            hub.on('showTime', function (t) {
+                $('#clock').text(t);
+            });
+            con.start();
+        });
+    </script>
+</body>
+</html>

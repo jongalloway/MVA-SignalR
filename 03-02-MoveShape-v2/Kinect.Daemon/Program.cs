@@ -1,20 +1,34 @@
-﻿using Microsoft.AspNet.SignalR.Client.Hubs;
+﻿using Coding4Fun.Kinect.WinForm;
+using Microsoft.AspNet.SignalR.Client.Hubs;
 using Microsoft.Kinect;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Coding4Fun.Kinect.WinForm;
 
 namespace Kinect.Daemon
 {
     class Program
     {
-        private Skeleton[] _skeletonData;
-        public KinectSensor _kinect;
         HubConnection _connection;
         IHubProxy _hub;
+
+        void Start()
+        {
+            _connection = 
+                new HubConnection("http://localhost:24421/");
+
+            _hub = _connection.CreateHubProxy("moveShape");
+
+            _connection.Start().ContinueWith((t) =>
+            {
+                if (t.IsFaulted)
+                    Start();
+                else
+                    StartKinect();
+            });
+        }
+
+        private Skeleton[] _skeletonData;
+        public KinectSensor _kinect;
 
         static void Log(string message)
         {
@@ -24,20 +38,6 @@ namespace Kinect.Daemon
         public Program()
         {
             _skeletonData = new Skeleton[0];
-        }
-
-        void Start()
-        {
-            _connection = new HubConnection("http://localhost:24421/");
-            _hub = _connection.CreateHubProxy("moveShape");
-
-            _connection.Start().ContinueWith((t) =>
-                {
-                    if (t.IsFaulted)
-                        Start();
-                    else
-                        StartKinect();
-                });
         }
 
         void StartKinect()

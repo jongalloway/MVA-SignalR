@@ -1,0 +1,32 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <div id="status">Disconnected</div>
+    <input type="text" id="message" value="Hello from Web" />
+    <input type="button" id="send" value="Send" />
+    <ul id="messages"></ul>
+    <script src="jquery-1.6.4.js"></script>
+    <script src="jquery.signalR-2.1.2.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var con = $.hubConnection();
+            var hub = con.createHubProxy('chat');
+
+            hub.on('receiveMessage', function (msg) {
+                $('#messages').prepend("<li>" + msg + "</li>");
+            });
+
+            $('#send').click(function () {
+                hub.invoke("SendMessage", $('#message').val());
+            });
+
+            con.start().done(function () {
+                $('#status').text('Connected');
+            });
+        });
+    </script>
+</body>
+</html>

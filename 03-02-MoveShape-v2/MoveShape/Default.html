@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+    <style type="text/css">
+        #shape {
+            width: 200px;
+            height: 200px;
+            background-color: #f00;
+            position: absolute;
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="status">Disconnected</div>
+    <div id="shape"></div>
+
+    <script src="Scripts/jquery-2.0.0.js"></script>
+    <script src="Scripts/jquery-ui-1.10.2.js"></script>
+    <script src="Scripts/jquery.signalR-1.1.0-beta1.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var shape = $("#shape"),
+                body = window.document.body;
+
+            var con = $.hubConnection();
+            var hub = con.createHubProxy("moveShape");
+
+            hub.on("shapeMoved", function (x, y) {
+                shape.css("left", x);
+                shape.css("top", y);
+                shape.text(x + ',' + y);
+            });
+
+            shape.draggable({
+                drag: function () {
+                    var self = $(this),
+                        x = this.offsetLeft,
+                        y = this.offsetTop;
+                    self.text(x + ',' + y);
+                    hub.invoke("MoveShape", x, y);
+                }
+            });
+
+            con.start().done(function () {
+                hub.invoke("Init");
+                $('#status').text("Connected");
+            });
+        });
+    </script>
+</body>
+</html>

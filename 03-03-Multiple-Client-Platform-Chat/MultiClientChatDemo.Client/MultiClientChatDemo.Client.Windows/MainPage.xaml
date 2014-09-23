@@ -13,7 +13,17 @@
                 <TextBox x:Name="_message" Text="Hello from Windows" Width="742" GotFocus="OnGotAccess"/>
                 <Button x:Name="_send" Content="Send" Click="_send_Click"/>
             </StackPanel>
-            <ListView x:Name="_messages" ItemsSource="{Binding Messages}"/>
+            <ListView x:Name="_messages" ItemsSource="{Binding Messages}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <Run Text="{Binding Sender}"/>
+                            <Run Text=":"/>
+                            <Run Text="{Binding Message}"/>
+                        </TextBlock>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackPanel>
     </Grid>
 </Page>

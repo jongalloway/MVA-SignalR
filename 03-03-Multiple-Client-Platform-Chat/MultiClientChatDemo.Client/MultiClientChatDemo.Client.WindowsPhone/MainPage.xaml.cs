@@ -47,7 +47,11 @@ namespace MultiClientChatDemo.Client
 
         private void _send_Click(object sender, RoutedEventArgs e)
         {
-            _client.SendMessage(_message.Text);
+            _client.SendMessage(new ChatMessage
+            {
+                Sender = "Windows Phone",
+                Message = _message.Text
+            });
         }
 
         private void OnGotAccess(object sender, RoutedEventArgs e)

@@ -10,9 +10,9 @@ namespace MultiClientChatDemo.Web
     [HubName("chat")]
     public class ChatHub : Hub
     {
-        public void SendMessage(string msg)
+        public void SendMessage(string sender, string msg)
         {
-            Clients.All.receiveMessage(msg);
+            Clients.All.receiveMessage(sender, msg);
         }
     }
 }

@@ -18,26 +18,31 @@ namespace MultiClientChatDemo.Client
             _hubConnection = new HubConnection(SITE_URL);
             _hub = _hubConnection.CreateHubProxy("chat");
 
-            _hub.On<string>("receiveMessage", (msg) =>
+            _hub.On<string,string>("receiveMessage", (sender, message) =>
                 {
                     if (MessageReceived != null)
-                        MessageReceived(this, new MessageReceivedEventArgs(msg));
+                        MessageReceived(this, new MessageReceivedEventArgs(
+                            new ChatMessage
+                            {
+                                Sender = sender,
+                                Message = message
+                            }));
                 });
 
             _hubConnection.Start();
         }
 
-        public void SendMessage(string message)
+        public void SendMessage(ChatMessage message)
         {
-            _hub.Invoke("sendMessage", message);
+            _hub.Invoke("sendMessage", message.Sender, message.Message);
         }
     }
 
     public class MessageReceivedEventArgs : EventArgs
     {
-        public string Message { get; set; }
+        public ChatMessage Message { get; set; }
 
-        public MessageReceivedEventArgs(string message)
+        public MessageReceivedEventArgs(ChatMessage message)
         {
             this.Message = message;
         }

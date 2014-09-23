@@ -16,12 +16,12 @@
         var con = $.hubConnection();
         var hub = con.createHubProxy('chat');
 
-        hub.on('receiveMessage', function (msg) {
-            $('#messages').prepend("<li>" + msg + "</li>");
+        hub.on('receiveMessage', function (sender, msg) {
+            $('#messages').prepend("<li>" + sender + ": " + msg + "</li>");
         });
 
         $('#send').click(function () {
-            hub.invoke("SendMessage", $('#message').val());
+            hub.invoke("SendMessage", "Web Site", $('#message').val());
         });
 
         con.start().done(function () {

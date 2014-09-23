@@ -24,7 +24,17 @@
 
         <!--ContentPanel contains LongListSelector and LongListSelector ItemTemplate. Place additional content here-->
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-            <ListView x:Name="_messages" ItemsSource="{Binding Messages}"/>
+            <ListView x:Name="_messages" ItemsSource="{Binding Messages}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock>
+                            <Run Text="{Binding Sender}"/>
+                            <Run Text=":"/>
+                            <Run Text="{Binding Message}"/>
+                        </TextBlock>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </Grid>
     </Grid>
 </Page>

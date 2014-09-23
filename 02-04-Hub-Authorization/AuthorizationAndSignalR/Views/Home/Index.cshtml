@@ -1,0 +1,21 @@
+﻿@{
+    ViewBag.Title = "Authorizing SignalR";
+}
+<h2>@ViewBag.Title</h2>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.signalR-2.0.2.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var con = $.hubConnection();
+            var hub = con.createHubProxy('helloHub');
+            hub.on('hello', function () {
+                alert('hello');
+            });
+            con.start(function () {
+                hub.invoke('hello');
+            });
+        });
+    </script>
+}

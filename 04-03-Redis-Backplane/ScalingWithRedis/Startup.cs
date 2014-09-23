@@ -3,17 +3,18 @@ using Microsoft.Owin;
 using Owin;
 using System.Configuration;
 
-[assembly: OwinStartup(typeof(ScalingWithSql.Startup))]
+[assembly: OwinStartup(typeof(ScalingWithRedis.Startup))]
 
-namespace ScalingWithSql
+namespace ScalingWithRedis
 {
     public class Startup
     {
         void SetupScaleOut()
         {
-            GlobalHost.DependencyResolver.UseSqlServer(
-                ConfigurationManager.ConnectionStrings["ScaleOutDb"].ConnectionString
-                );
+            GlobalHost.DependencyResolver.UseRedis("myredisbackplane.redis.cache.windows.net",
+                6379,
+                "8gUnFTrhXH8Lc4RI3PjHpfu51QHgVTMrSkogsqbZek8=",
+                "RedisBackplaneDemo");
         }
 
         public void Configuration(IAppBuilder app)

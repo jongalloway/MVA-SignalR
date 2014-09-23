@@ -7,11 +7,11 @@ namespace MultiClientChatDemo.Client
     {
         public ChatClientViewModel()
         {
-            this.Messages = new ObservableCollection<string>();
+            this.Messages = new ObservableCollection<ChatMessage>();
         }
 
-        private ObservableCollection<string> _messages;
-        public ObservableCollection<string> Messages
+        private ObservableCollection<ChatMessage> _messages;
+        public ObservableCollection<ChatMessage> Messages
         {
             get { return _messages; }
             set
@@ -30,6 +30,31 @@ namespace MultiClientChatDemo.Client
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+    }
+
+    public class ChatMessage : BaseViewModel
+    {
+        private string _message;
+        public string Message
+        {
+            get { return _message; }
+            set
+            {
+                _message = value;
+                OnPropertyChanged("Message");
+            }
+        }
+
+        private string _sender;
+        public string Sender
+        {
+            get { return _sender; }
+            set
+            {
+                _sender = value;
+                OnPropertyChanged("Sender");
+            }
         }
     }
 }

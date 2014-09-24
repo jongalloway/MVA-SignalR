@@ -29,8 +29,8 @@ namespace ChatClient.Shared
                 if (OnMessageReceived != null)
 						OnMessageReceived(this, string.Format("{0}: {1}", sender, message));
             });
-
-			await Send("Connected");
+					
+		    await Send("Connected");
         }
 
         public Task Send(string message)

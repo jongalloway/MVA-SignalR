@@ -1,21 +1,21 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" PreferredExecutionTarget="Android.AVD_for_Galaxy_Nexus_by_Google" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Android.AVD_for_Android_Wear_Round_by_Google" />
   <MonoDevelop.Ide.Workbench ActiveDocument="ChatClient.iOS/Client.cs">
     <Files>
       <File FileName="ChatClient.iOS/Client.cs" Line="1" Column="1" />
       <File FileName="ChatClient.iOS/MyViewController.cs" Line="1" Column="1" />
+      <File FileName="ChatClient.GoogleWear/MainActivity.cs" Line="28" Column="28" />
+      <File FileName="ChatClient.GoogleWear/Resources/Layout/Main.axml" Line="1" Column="1" />
+      <File FileName="ChatClient.GoogleWear/Properties/AndroidManifest.xml" Line="12" Column="12" />
     </Files>
-    <Pads>
-      <Pad Id="ProjectPad">
-        <State expanded="True">
-          <Node name="ChatClient.Droid" selected="True" />
-          <Node name="ChatClient.iOS" expanded="True" />
-        </State>
-      </Pad>
-    </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/jongalloway/signalr/mva-signalr/03-04-Xamarin-Clients/ChatClient.iOS/Client.cs" line="25" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <DisabledProjects>
+    <String>ChatClient.GoogleWear/ChatClient.GoogleWear.csproj</String>
+  </DisabledProjects>
 </Properties>

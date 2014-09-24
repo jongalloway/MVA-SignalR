@@ -1,9 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
-using Android.App;
-using Android.OS;
-using Android.Views;
 
 namespace ChatClient.Shared
 {

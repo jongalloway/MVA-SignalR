@@ -13,8 +13,10 @@ namespace ScalingWithRedis
         {
             GlobalHost.DependencyResolver.UseRedis("myredisbackplane.redis.cache.windows.net",
                 6379,
+            #region Hidden on purpose
                 "8gUnFTrhXH8Lc4RI3PjHpfu51QHgVTMrSkogsqbZek8=",
-                "RedisBackplaneDemo");
+            #endregion
+            "RedisBackplaneDemo");
         }
 
         public void Configuration(IAppBuilder app)
